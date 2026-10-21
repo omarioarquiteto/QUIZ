@@ -2,7 +2,7 @@
 <html lang="pt-BR" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Quiz OmniVerse — Desafio dos 12 Temas</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,6 +87,106 @@
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
     ::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.5); border-radius: 9999px; }
+
+    /* Accessible, responsive behavior for phones and compact desktop windows. */
+    html { scroll-behavior: smooth; }
+    button, input, select, textarea { font: inherit; }
+    button, [role="button"], label[for] { touch-action: manipulation; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid #a5b4fc;
+      outline-offset: 2px;
+    }
+    .nav-tab { min-height: 40px; }
+    #view-db input, #view-db select, #view-db textarea { min-width: 0; max-width: 100%; }
+    #view-db button, #view-db label[for="input-import-json"] { min-height: 42px; }
+    #db-questions-list { overscroll-behavior: contain; }
+    @media (max-width: 640px) {
+      body { padding-bottom: calc(5.75rem + env(safe-area-inset-bottom)); }
+      header .max-w-6xl {
+        flex-wrap: nowrap;
+        gap: .4rem;
+        padding: .55rem .7rem;
+        align-items: center;
+      }
+      header .max-w-6xl > div:first-child { flex: 1 1 auto; min-width: 0; }
+      #btn-home-logo { gap: .45rem; min-width: 0; }
+      #avatar-badge { width: 2.25rem; height: 2.25rem; flex-shrink: 0; }
+      #btn-home-logo > div:last-child { min-width: 0; }
+      #btn-home-logo .font-extrabold { font-size: .88rem; white-space: nowrap; }
+      #hud-rank-title, #hud-xp-bar, #hud-xp-text { display: none; }
+      #hud-level-pill { font-size: 9px; padding: .1rem .35rem; }
+      header .max-w-6xl > div:last-child { flex: 0 0 auto; gap: .35rem; }
+      #hud-coins { font-variant-numeric: tabular-nums; }
+      #btn-sound-toggle { min-width: 38px; min-height: 38px; padding: .4rem; }
+      header nav {
+        position: fixed;
+        z-index: 45;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: .15rem;
+        padding: .35rem .35rem calc(.35rem + env(safe-area-inset-bottom));
+        border: 0;
+        border-top: 1px solid rgba(148,163,184,.22);
+        border-radius: 0;
+        background: rgba(2,6,23,.97);
+        box-shadow: 0 -8px 28px rgba(0,0,0,.22);
+        backdrop-filter: blur(18px);
+      }
+      header nav .nav-tab {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: .12rem;
+        min-width: 0;
+        min-height: 48px;
+        padding: .35rem .1rem !important;
+        border-radius: .65rem;
+        font-size: .68rem !important;
+        line-height: 1.15;
+        text-align: center;
+        white-space: normal;
+      }
+      header nav .nav-tab .nav-label { display: block; }
+      #hud-trophy-count { display: none; }
+      #toast-container { bottom: calc(5.7rem + env(safe-area-inset-bottom)); }
+      main { padding-top: .9rem !important; }
+      #view-home, #view-prizes, #view-stats, #view-db { gap: 1rem; }
+      #themes-grid { gap: .55rem; }
+      .theme-card { padding: .7rem; min-height: 150px; }
+      .theme-card:hover, .option-btn:hover:not(:disabled) { transform: none; }
+      .option-btn { min-height: 54px; padding: .8rem !important; }
+      #view-quiz .glass-card { padding: 1rem; }
+      #view-quiz .text-2xl, #view-quiz .sm\\:text-3xl { overflow-wrap: anywhere; }
+      #view-db > .glass-card { padding: .85rem; }
+      #view-db .grid.grid-cols-2 { grid-template-columns: minmax(0, 1fr); }
+      #view-db .grid.lg\\:grid-cols-12 { gap: .8rem; }
+      #view-db .flex.items-center.gap-2 { flex-wrap: wrap; }
+      #db-filter-theme, #db-search-input { width: 100%; }
+      #db-questions-list { max-height: 45vh; padding-right: 0; }
+      #view-db .flex.flex-wrap.items-center.gap-2\\.5 { width: 100%; }
+      #btn-export-json, #input-import-json + span,
+      #view-db label[for="input-import-json"] { flex: 1 1 100%; justify-content: center; }
+    }
+    @media (max-width: 360px) {
+      #hud-coins { padding: .3rem .45rem; }
+      #btn-home-logo .font-extrabold { font-size: .8rem; }
+      #hud-level-pill { display: none; }
+      #themes-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
   </style>
 </head>
 <body class="antialiased selection:bg-indigo-500 selection:text-white pb-16">
@@ -147,8 +247,11 @@
           <button id="nav-stats" type="button" class="nav-tab px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white">
             📊 Temas
           </button>
-          <button id="nav-db" type="button" class="nav-tab px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white" title="Gerenciar, importar ou exportar o arquivo separado questions.json">
-            🗄️ Base <span class="hidden sm:inline">JSON</span>
+          <button id="nav-db-login" type="button" class="nav-tab px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white" title="Entrar com GitHub para acessar a Base JSON">
+            <span aria-hidden="true">🔐</span> <span class="nav-label">Proprietário</span>
+          </button>
+          <button id="nav-db" type="button" class="nav-tab hidden px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white" title="Gerenciar, importar ou exportar o arquivo separado questions.json">
+            <span aria-hidden="true">🗄️</span> <span class="nav-label">Base JSON</span>
           </button>
         </nav>
 
@@ -699,11 +802,119 @@
     </div>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-auth-compat.js"></script>
   <script src="questions.js"></script>
 
   <script>
     (function() {
       "use strict";
+
+      // ==================== OWNER-ONLY DATABASE ACCESS ====================
+      // GitHub account ID for omarioarquiteto (stable numeric identifier).
+      const QUIZ_OWNER_GITHUB_ID = "202185131";
+      const QUIZ_FIREBASE_CONFIG = {
+        apiKey: "AIzaSyBox8tior0HX5T6ox2ZNNo9fbzUkHxw8go",
+        authDomain: "resolvei-c95d1.firebaseapp.com",
+        projectId: "resolvei-c95d1",
+        storageBucket: "resolvei-c95d1.firebasestorage.app",
+        messagingSenderId: "671425023175",
+        appId: "1:671425023175:web:deb8ce2174b07e6c16c2e2"
+      };
+      let quizAdminAuth = null;
+      let quizAdminUser = null;
+
+      function isQuizOwner(user) {
+        return !!user && Array.isArray(user.providerData) &&
+          user.providerData.some(function(provider) {
+            return provider && provider.providerId === "github.com" &&
+              String(provider.uid) === QUIZ_OWNER_GITHUB_ID;
+          });
+      }
+
+      function updateQuizAdminNavigation(user) {
+        quizAdminUser = isQuizOwner(user) ? user : null;
+        const loginButton = document.getElementById("nav-db-login");
+        const dbButton = document.getElementById("nav-db");
+        if (loginButton) loginButton.classList.toggle("hidden", !!quizAdminUser);
+        if (dbButton) dbButton.classList.toggle("hidden", !quizAdminUser);
+
+        const dbView = document.getElementById("view-db");
+        if (!quizAdminUser && dbView && !dbView.classList.contains("hidden")) {
+          switchView("view-home");
+        }
+      }
+
+      function initializeQuizAdminAuth() {
+        if (location.protocol === "file:") return;
+        try {
+          if (!window.firebase || !firebase.auth) {
+            throw new Error("O serviço de autenticação não foi carregado.");
+          }
+          // Separate named app prevents the quiz gate from logging the user out of Resolvei.
+          let adminApp = firebase.apps.find(function(app) {
+            return app.name === "QuizOmniVerseAdmin";
+          });
+          if (!adminApp) {
+            adminApp = firebase.initializeApp(QUIZ_FIREBASE_CONFIG, "QuizOmniVerseAdmin");
+          }
+          quizAdminAuth = adminApp.auth();
+          quizAdminAuth.onAuthStateChanged(function(user) {
+            if (user && !isQuizOwner(user)) {
+              updateQuizAdminNavigation(null);
+              quizAdminAuth.signOut().catch(function() {});
+              return;
+            }
+            updateQuizAdminNavigation(user);
+          });
+        } catch (error) {
+          console.warn("Quiz owner authentication is unavailable:", error);
+        }
+      }
+
+      async function signInQuizOwner() {
+        if (location.protocol === "file:") {
+          showToast("Acesso administrativo", "Abra o jogo em uma hospedagem HTTPS para autenticar com GitHub.", "🔐", "border-amber-400");
+          return;
+        }
+        if (!quizAdminAuth) initializeQuizAdminAuth();
+        if (!quizAdminAuth) {
+          showToast("Login indisponível", "Verifique a conexão e o carregamento do serviço de autenticação.", "⚠️", "border-rose-400");
+          return;
+        }
+        const button = document.getElementById("nav-db-login");
+        if (button) { button.disabled = true; button.setAttribute("aria-busy", "true"); }
+        try {
+          const provider = new firebase.auth.GithubAuthProvider();
+          provider.addScope("read:user");
+          const credential = await quizAdminAuth.signInWithPopup(provider);
+          if (!isQuizOwner(credential.user)) {
+            await quizAdminAuth.signOut();
+            updateQuizAdminNavigation(null);
+            showToast("Acesso negado", "A Base JSON é exclusiva do proprietário do jogo.", "⛔", "border-rose-400");
+            return;
+          }
+          updateQuizAdminNavigation(credential.user);
+          playSound("click");
+          switchView("view-db");
+          showToast("Acesso autorizado", "Bem-vindo à Base JSON administrativa.", "🔐", "border-emerald-400");
+        } catch (error) {
+          console.error("Quiz owner sign-in:", error);
+          let message = "Não foi possível validar sua conta GitHub. Tente novamente.";
+          if (error && error.code === "auth/operation-not-allowed") {
+            message = "Ative o provedor GitHub em Firebase Console → Authentication → Sign-in method.";
+          } else if (error && error.code === "auth/unauthorized-domain") {
+            message = "Adicione este domínio aos domínios autorizados do Firebase Authentication.";
+          } else if (error && error.code === "auth/popup-blocked") {
+            message = "O navegador bloqueou a janela de login. Permita pop-ups para este site.";
+          } else if (error && error.code === "auth/popup-closed-by-user") {
+            message = "A janela de login foi fechada antes da conclusão.";
+          }
+          showToast("Falha no login", message, "⚠️", "border-rose-400");
+        } finally {
+          if (button) { button.disabled = false; button.removeAttribute("aria-busy"); }
+        }
+      }
 
       // ==================== LEVEL TIERS & GAMIFICATION CONFIG ====================
       const LEVEL_CONFIG = [
@@ -1091,6 +1302,10 @@
 
       const VIEWS = ["view-home", "view-quiz", "view-results", "view-prizes", "view-stats", "view-db"];
       function switchView(viewId) {
+        if (viewId === "view-db" && !quizAdminUser) {
+          showToast("Acesso restrito", "Entre com a conta GitHub proprietária para abrir a Base JSON.", "🔐", "border-rose-400");
+          return;
+        }
         if (viewId !== "view-quiz" && match.timerInterval) {
           clearInterval(match.timerInterval);
           match.timerInterval = null;
@@ -1113,14 +1328,15 @@
           "view-db": "nav-db"
         };
         const activeNav = navMap[viewId];
-        ["nav-play", "nav-prizes", "nav-stats", "nav-db"].forEach(function(nid) {
+        ["nav-play", "nav-prizes", "nav-stats", "nav-db-login", "nav-db"].forEach(function(nid) {
           const btn = document.getElementById(nid);
           if (!btn) return;
-          if (nid === activeNav) {
-            btn.className = "nav-tab px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-indigo-600 text-white shadow";
-          } else {
-            btn.className = "nav-tab px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white";
-          }
+          const activeClass = nid === activeNav
+            ? "bg-indigo-600 text-white shadow"
+            : "text-slate-300 hover:text-white";
+          btn.className = "nav-tab px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition " + activeClass;
+          if (nid === "nav-db") btn.classList.toggle("hidden", !quizAdminUser);
+          if (nid === "nav-db-login") btn.classList.toggle("hidden", !!quizAdminUser);
         });
 
         if (viewId === "view-home") renderHomeThemes();
@@ -2060,7 +2276,14 @@
         playSound("click");
         switchView("view-stats");
       });
+      document.getElementById("nav-db-login").addEventListener("click", function() {
+        signInQuizOwner();
+      });
       document.getElementById("nav-db").addEventListener("click", function() {
+        if (!quizAdminUser) {
+          showToast("Acesso restrito", "Entre com a conta GitHub proprietária para abrir a Base JSON.", "🔐", "border-rose-400");
+          return;
+        }
         playSound("click");
         switchView("view-db");
       });
@@ -2182,6 +2405,7 @@
       // Initialize
       renderAllViews();
       tryFetchExternalJson();
+      initializeQuizAdminAuth();
     })();
   </script>
 </body>
